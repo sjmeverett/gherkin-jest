@@ -1,0 +1,4 @@
+src/
+dist/test/
+jest.config.json
+tsconfig.json
