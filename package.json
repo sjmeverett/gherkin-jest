@@ -1,0 +1,38 @@
+{
+  "name": "gherkin-jest",
+  "version": "0.1.0",
+  "description": "Run tests written in gherkin with jest",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --config=jest.config.json",
+    "prepublish": "tsc"
+  },
+  "keywords": [
+    "gherkin",
+    "cucumber",
+    "jest",
+    "test",
+    "bdd"
+  ],
+  "author": "Stewart MacKenzie-Leigh",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^21.1.5",
+    "@types/lodash": "^4.14.83",
+    "@types/node": "^8.0.50",
+    "jest": "^21.2.1",
+    "ts-jest": "^21.2.1",
+    "typescript": "^2.6.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stewartml/gherkin-jest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stewartml/gherkin-jest/issues"
+  },
+  "homepage": "https://github.com/stewartml/gherkin-jest#readme"
+}

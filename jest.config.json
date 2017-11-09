@@ -1,0 +1,13 @@
+{
+  "transform": {
+    "^.+\\.(ts|tsx)$": "ts-jest/preprocessor",
+    "^.+\\.feature$": "<rootDir>/../../dist/lib"
+  },
+  "moduleNameMapper" :{
+    "^gherkin-jest$": "<rootDir>/../../dist/lib"
+  },
+  "rootDir": "src/test",
+  "testMatch": ["**/*.test.ts", "**/*.feature"],
+  "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "feature"],
+  "setupFiles": ["<rootDir>/../../dist/test/support"]
+}
