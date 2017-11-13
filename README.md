@@ -20,7 +20,7 @@ Then, add to your jest config:
 Define your steps in the setup file:
 
 ```js
-const { cucumber } = require('../lib/cucumber');
+const { cucumber } = require('gherkin-jest');
 
 let a;
 let b;
