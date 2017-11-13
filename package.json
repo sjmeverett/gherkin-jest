@@ -1,8 +1,9 @@
 {
   "name": "gherkin-jest",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Run tests written in gherkin with jest",
-  "main": "index.js",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
   "scripts": {
     "test": "jest --config=jest.config.json",
     "prepublish": "tsc"
