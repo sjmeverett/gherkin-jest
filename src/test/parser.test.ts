@@ -1,8 +1,8 @@
-import Parser from "../lib/parser";
+import { parse } from "../lib/parser";
 
 describe("Parser", () => {
   it("should parse a standard scenario", () => {
-    const parser = new Parser(
+    const result = parse(
       `
       Feature: foo
         As a user
@@ -19,15 +19,14 @@ describe("Parser", () => {
           Then I want to test
           And test
           And test
-    `,
-      "filename"
+    `
     );
 
-    expect(parser.parse()).toEqual({
+    expect(result).toEqual({
       name: "foo",
       actor: "a user",
       want: "to test",
-      reason: "I can test",
+      reason: "that I can test",
       scenarios: [
         {
           name: "this is a test",
@@ -44,7 +43,7 @@ describe("Parser", () => {
   });
 
   it("should parse a scenario outline", () => {
-    const parser = new Parser(
+    const result = parse(
       `
       Feature: foo
         As a user
@@ -59,28 +58,20 @@ describe("Parser", () => {
           Examples:
             | given | when | then |
             | abc   | 123  | -£*% |
-            | \\|t  | test | test |
-      `,
-      "filename"
+      `
     );
 
-    expect(parser.parse()).toEqual({
+    expect(result).toEqual({
       name: "foo",
       actor: "a user",
       want: "to test",
-      reason: "I can test",
+      reason: "that I can test",
       scenarios: [
         {
           name: "this is a scenario outline",
           given: ["that I have abc"],
           when: ["I 123"],
           then: ["I -£*%"]
-        },
-        {
-          name: "this is a scenario outline",
-          given: ["that I have |t"],
-          when: ["I test"],
-          then: ["I test"]
         }
       ]
     });

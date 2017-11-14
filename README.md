@@ -10,11 +10,13 @@ First, install:
 
 Then, add to your jest config:
 
-```
+```json
 "transform": {
   "^.+\\.feature$": "gherkin-jest"
 },
-"setupFiles": ["<rootDir>/test/support"]
+"setupFiles": ["<rootDir>/test/support"],
+"testMatch": ["**/*.test.ts", "**/*.feature"],
+"moduleFileExtensions": ["js", "jsx", "ts", "tsx", "feature"],
 ```
 
 Define your steps in the setup file:
@@ -22,21 +24,25 @@ Define your steps in the setup file:
 ```js
 const { cucumber } = require('gherkin-jest');
 
-let a;
-let b;
-let answer;
+cucumber.defineCreateWorld(() => {
+  return {
+    a: null,
+    b: null,
+    answer: null
+  }
+})
 
-cucumber.given(/^I have numbers (\d+) and (\d+)$/, (match) => {
-  a = parseInt(match[1]);
-  b = parseInt(match[2]);
+cucumber.given(/^I have numbers (\d+) and (\d+)$/, (world, a, b) => {
+  world.a = parseInt(a);
+  world.b = parseInt(b);
 });
 
-cucumber.when(/^I add them$/, (match) => {
-  answer = a + b;
+cucumber.when(/^I add them$/, (world) => {
+  world.answer = world.a + world.b;
 });
 
-cucumber.then(/^I get (\d+)$/, (match) => {
-  expect(answer).toBe(parseInt(match[1]));
+cucumber.then(/^I get (\d+)$/, (world, answer) => {
+  expect(world.answer).toBe(parseInt(answer));
 });
 ```
 
