@@ -8,14 +8,14 @@ describe('Cucumber', () => {
     const rule3 = jest.fn();
     const rule4 = jest.fn();
 
-    cucumber.given(/I have (\d+)/, rule1);
-    cucumber.given(/I don't have (\d+)/, rule2);
-    cucumber.when(/I have (\d+)/, rule3);
-    cucumber.then(/I have (\d+)/, rule4);
+    cucumber.defineGiven(/I have (\d+)/, rule1);
+    cucumber.defineGiven(/I don't have (\d+)/, rule2);
+    cucumber.defineWhen(/I have (\d+)/, rule3);
+    cucumber.defineWhen(/I have (\d+)/, rule4);
 
-    cucumber.given('I have 3');
+    cucumber.given(null, 'I have 3');
     expect(rule1).toHaveBeenCalledTimes(1);
-    expect([...rule1.mock.calls[0][0]]).toEqual(['I have 3', '3']);
+    expect(rule1).toHaveBeenCalledWith(null, "3");
     expect(rule2).not.toHaveBeenCalled();
     expect(rule3).not.toHaveBeenCalled();
     expect(rule4).not.toHaveBeenCalled();
@@ -28,14 +28,14 @@ describe('Cucumber', () => {
     const rule3 = jest.fn();
     const rule4 = jest.fn();
 
-    cucumber.when(/I have (\d+)/, rule1);
-    cucumber.when(/I don't have (\d+)/, rule2);
-    cucumber.given(/I have (\d+)/, rule3);
-    cucumber.then(/I have (\d+)/, rule4);
+    cucumber.defineWhen(/I have (\d+)/, rule1);
+    cucumber.defineWhen(/I don't have (\d+)/, rule2);
+    cucumber.defineGiven(/I have (\d+)/, rule3);
+    cucumber.defineThen(/I have (\d+)/, rule4);
 
-    cucumber.when('I have 3');
+    cucumber.when(null, 'I have 3');
     expect(rule1).toHaveBeenCalledTimes(1);
-    expect([...rule1.mock.calls[0][0]]).toEqual(['I have 3', '3']);
+    expect(rule1).toHaveBeenCalledWith(null, "3");
     expect(rule2).not.toHaveBeenCalled();
     expect(rule3).not.toHaveBeenCalled();
     expect(rule4).not.toHaveBeenCalled();
@@ -48,14 +48,14 @@ describe('Cucumber', () => {
     const rule3 = jest.fn();
     const rule4 = jest.fn();
 
-    cucumber.then(/I have (\d+)/, rule1);
-    cucumber.then(/I don't have (\d+)/, rule2);
-    cucumber.when(/I have (\d+)/, rule3);
-    cucumber.given(/I have (\d+)/, rule4);
+    cucumber.defineThen(/I have (\d+)/, rule1);
+    cucumber.defineThen(/I don't have (\d+)/, rule2);
+    cucumber.defineWhen(/I have (\d+)/, rule3);
+    cucumber.defineGiven(/I have (\d+)/, rule4);
 
-    cucumber.then('I have 3');
+    cucumber.then(null, 'I have 3');
     expect(rule1).toHaveBeenCalledTimes(1);
-    expect([...rule1.mock.calls[0][0]]).toEqual(['I have 3', '3']);
+    expect(rule1).toHaveBeenCalledWith(null, "3");
     expect(rule2).not.toHaveBeenCalled();
     expect(rule3).not.toHaveBeenCalled();
     expect(rule4).not.toHaveBeenCalled();

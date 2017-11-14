@@ -19,9 +19,10 @@ const {cucumber} = require("gherkin-jest");
 
 describe("Feature: " + "this is a test", () => {
   it("supports the scenario: " + "a scenario", () => {
-    cucumber.given("some givens");
-    cucumber.when("I do a thing");
-    cucumber.then("I will succeed");
+    const world = cucumber.createWorld();
+    cucumber.given(world, "some givens");
+    cucumber.when(world, "I do a thing");
+    cucumber.then(world, "I will succeed");
   });
 });`)
   })

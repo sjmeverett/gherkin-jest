@@ -1,6 +1,6 @@
 
 export interface RuleHandler {
-  (match: RegExpMatchArray): any;
+  (world: any, ...args: string[]): any;
 }
 
 interface Rule {
@@ -14,51 +14,50 @@ export default class Cucumber {
   private givenRules: Rule[] = [];
   private whenRules: Rule[] = [];
   private thenRules: Rule[] = [];
+  private _createWorld: () => any;
 
-  given(str: string);
-  given(regex: RegExp, handler: RuleHandler);
-  given(strOrRegex: string | RegExp, handler?: RuleHandler) {
-    return this.registerOrRunRule(this.givenRules, "Given", strOrRegex, handler);
+  defineGiven(regex: RegExp, handler: RuleHandler) {
+    this.givenRules.push({regex, handler});
   }
 
-  when(str: string);
-  when(regex: RegExp, handler: RuleHandler);
-  when(strOrRegex: string | RegExp, handler?: RuleHandler) {
-    return this.registerOrRunRule(this.whenRules, "When", strOrRegex, handler);
+  defineWhen(regex: RegExp, handler: RuleHandler) {
+    this.whenRules.push({regex, handler});
   }
 
-  then(str: string);
-  then(regex: RegExp, handler: RuleHandler);
-  then(strOrRegex: string | RegExp, handler?: RuleHandler) {
-    return this.registerOrRunRule(this.thenRules, "Then", strOrRegex, handler);
+  defineThen(regex: RegExp, handler: RuleHandler) {
+    this.thenRules.push({regex, handler});
+  }
+  
+  defineCreateWorld(_createWorld: () => any): void {
+    this._createWorld = _createWorld;
   }
 
-  private runMatchingRule(rules: Rule[], str: string, clause: string): any {
+  given(world: any, str: string) {
+    return this.runMatchingRule(this.givenRules, "Given", world, str);
+  }
+  
+  when(world: any, str: string) {
+    return this.runMatchingRule(this.whenRules, "When", world, str);
+  }
+    
+  then(world: any, str: string) {
+    return this.runMatchingRule(this.thenRules, "Then", world, str);
+  }
+
+  createWorld(): any {
+    return this._createWorld();
+  }
+
+  private runMatchingRule(rules: Rule[], clause: string, world: any, str: string): any {
     for (const rule of rules) {
       const match = str.match(rule.regex);
 
       if (match) {
-        return rule.handler(match);
+        return rule.handler(world, ...match.slice(1));
       }
     }
 
-    throw new Error(`Could not matching rule: ${clause} ${str}`);
-  }
-
-  private registerOrRunRule(
-    rules: Rule[],
-    clause: Clause,
-    strOrRegex: string | RegExp,
-    handler?: RuleHandler
-  ) {
-    if (typeof strOrRegex === 'string') {
-      return this.runMatchingRule(rules, strOrRegex, clause);
-    } else {
-      rules.push({
-        regex: strOrRegex,
-        handler
-      });
-    }
+    throw new Error(`Could not find matching rule: ${clause} ${str}`);
   }
 }
 

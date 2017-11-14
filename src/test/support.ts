@@ -1,31 +1,33 @@
 import { cucumber } from '../lib/cucumber';
 
-let a: number;
-let b: number;
-let answer: number;
+cucumber.defineCreateWorld(() => ({
+  a: null,
+  b: null,
+  answer: null
+}));
 
-cucumber.given(/^I have numbers (\d+) and (\d+)$/, (match) => {
-  a = parseInt(match[1]);
-  b = parseInt(match[2]);
+cucumber.defineGiven(/^I have numbers (\d+) and (\d+)$/, (world, a, b) => {
+  world.a = parseInt(a);
+  world.b = parseInt(b);
 });
 
-cucumber.when(/^I (add|subtract|multiply|divide) them$/, (match) => {
-  switch (match[1]) {
+cucumber.defineWhen(/^I (add|subtract|multiply|divide) them$/, (world, op) => {
+  switch (op) {
     case 'add':
-      answer = a + b;
+      world.answer = world.a + world.b;
       break;
     case 'subtract':
-      answer = a - b;
+      world.answer = world.a - world.b;
       break;
     case 'multiply':
-      answer = a * b;
+      world.answer = world.a * world.b;
       break;
     case 'divide':
-      answer = a / b;
+      world.answer = world.a / world.b;
       break;
   }
 });
 
-cucumber.then(/^I get (\d+)$/, (match) => {
-  expect(answer).toBe(parseInt(match[1]));
+cucumber.defineThen(/^I get (\d+)$/, (world, answer) => {
+  expect(world.answer).toBe(parseInt(answer));
 });
