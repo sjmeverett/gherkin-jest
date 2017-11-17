@@ -24,19 +24,20 @@ describe("Parser", () => {
 
     expect(result).toEqual({
       name: "foo",
-      actor: "a user",
-      want: "to test",
-      reason: "that I can test",
       scenarios: [
         {
           name: "this is a test",
-          given: [
+          rules: [
             "that I am testing",
             "I am still testing",
-            "also that I test"
-          ],
-          when: ["I test", "test", "continue testing"],
-          then: ["I want to test", "test", "test"]
+            "also that I test",
+            "I test",
+            "test",
+            "continue testing",
+            "I want to test",
+            "test",
+            "test"
+          ]
         }
       ]
     });
@@ -46,10 +47,6 @@ describe("Parser", () => {
     const result = parse(
       `
       Feature: foo
-        As a user
-        I want to test
-        So that I can test
-      
         Scenario Outline: this is a scenario outline
           Given that I have <given>
           When I <when>
@@ -63,15 +60,10 @@ describe("Parser", () => {
 
     expect(result).toEqual({
       name: "foo",
-      actor: "a user",
-      want: "to test",
-      reason: "that I can test",
       scenarios: [
         {
           name: "this is a scenario outline",
-          given: ["that I have abc"],
-          when: ["I 123"],
-          then: ["I -£*%"]
+          rules: ["that I have abc", "I 123", "I -£*%"]
         }
       ]
     });
