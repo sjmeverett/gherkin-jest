@@ -1,17 +1,23 @@
 import { cucumber } from '../lib/cucumber';
 
+interface World {
+  a?: number;
+  b?: number;
+  answer?: number;
+}
+
 cucumber.defineCreateWorld(() => ({
   a: null,
   b: null,
   answer: null
 }));
 
-cucumber.defineGiven(/^I have numbers (\d+) and (\d+)$/, (world, a, b) => {
+cucumber.defineRule(/^I have numbers (\d+) and (\d+)$/, (world: World, a: string, b: string) => {
   world.a = parseInt(a);
   world.b = parseInt(b);
 });
 
-cucumber.defineWhen(/^I (add|subtract|multiply|divide) them$/, (world, op) => {
+cucumber.defineRule(/^I (add|subtract|multiply|divide) them$/, (world: World, op: string) => {
   switch (op) {
     case 'add':
       world.answer = world.a + world.b;
@@ -28,6 +34,6 @@ cucumber.defineWhen(/^I (add|subtract|multiply|divide) them$/, (world, op) => {
   }
 });
 
-cucumber.defineThen(/^I get (\d+)$/, (world, answer) => {
+cucumber.defineRule(/^I get (\d+)$/, (world: World, answer: string) => {
   expect(world.answer).toBe(parseInt(answer));
 });

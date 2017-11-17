@@ -1,17 +1,12 @@
 
 export interface Feature {
   name: Clause;
-  actor: Clause;
-  want: Clause;
-  reason: Clause;
   scenarios: Scenario[];
 }
 
 export interface Scenario {
   name: Clause;
-  given: Clause[];
-  when: Clause[];
-  then: Clause[];
+  rules: Clause[];
 }
 
 export type Clause = string;

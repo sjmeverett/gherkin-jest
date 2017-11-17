@@ -1,4 +1,6 @@
 {
+  const _ = require('lodash');
+
   function expandTemplateString(template, example) {
     return template.replace(/<([^>]+)>/g, (_, key) => example[key]);
   }
@@ -15,49 +17,54 @@
 }
 
 Feature
-  = _ TFeature name:String NL _ TAs actor:String NL _ TIWant want:String NL _ TSo reason:String NL _ scenarios:Scenarios
-	{ return { name, actor, want, reason, scenarios } }
+  = _ TFeature name:String NL Preamble? _ scenarios:Scenarios
+	{ return { name, scenarios } }
+
+Preamble
+  = As Want Reason
+  / As Want
+
+As
+  = _ TAs actor:String NL
+  { return actor }
+
+Want
+  = _ TIWant want:String NL 
+  { return want }
+
+Reason
+  = _ TSo reason:String NL
+  { return reason }
 
 Scenarios
-  = scenario:Scenario NL scenarios:Scenarios
-  { return [...scenario, ...scenarios] }
-
-  / scenario:Scenario _
-  { return [...scenario] }
+  = scenarios:Scenario*
+  { return _.flatten(scenarios) }
           
-Scenario = _ TScenario name:String NL _ given:Givens NL when:Whens NL then:Thens
-  { return [{ name, given, when, then }] }
+Scenario = _ TScenario name:String NL rules:Rules _
+  { return { name, rules } }
 
-  / _ TScenarioOutline name:String NL _ given:Givens NL when:Whens NL then:Thens NL examples:Examples
+  / _ TScenarioOutline name:String NL rules:Rules examples:Examples _
   { 
     return examples.map((example) => ({
       name: expandTemplateString(name, example),
-      given: given.map((template) => expandTemplateString(template, example)),
-      when: when.map((template) => expandTemplateString(template, example)),
-      then: then.map((template) => expandTemplateString(template, example))
+      rules: rules.map((template) => expandTemplateString(template, example))
     }));
   }
 
-Givens
-  = given:Given NL ands:Ands
-  { return [given, ...ands] }
-       
-  / given:Given
-  { return [given] }
+Rules
+  = rules:Rule+
+  { return rules }
 
-Whens
-  = when:When NL ands:Ands
-  { return [when, ...ands] }
+Rule
+  = _ Clause rule:String NL
+  { return rule }
 
-  / when:When
-	{ return [when] }
-	
-Thens
-  = then:Then NL ands:Ands
-  { return [then, ...ands] }
-      
-  / then:Then
-	{ return [then] }
+Clause
+  = TGiven
+  / TWhen
+  / TThen
+  / TAnd
+  / TStar
 	
 Examples
   = _ TExamples NL table:Table
@@ -75,45 +82,16 @@ Examples
   }
 
 Table
-  = row:TableRow NL rows:Table
-  { return [row, ...rows] }
-
-  / row:TableRow
-  { return [row] }
+  = rows:TableRow*
+  { return rows }
 
 TableRow
-  = _ cells:TableCells
+  = _ TTableSep cells:TableCell* NL
   { return cells }
-         
-TableCells
-  = TTableSep cell:TTableCell cells:TableCells
-  { return [cell, ...cells] }
 
-  / TTableSep cell:TTableCell TTableSep
-  { return [cell] }
-
-Given
-  = _ TGiven str:String
-  { return str }
-
-When
-  = _ TWhen str:String
-  { return str }
-
-Then
-  = _ TThen str:String
-  { return str }
-
-Ands
-  = and:And NL ands:Ands
-  { return [and, ...ands] }
-     
-  / and:And
-	{ return [and] }
-
-And
-  = _ TAnd clause:String
-  { return clause; }
+TableCell
+  = cell:TTableCell TTableSep
+  { return cell }
 
 TFeature = "Feature:"
 TAs = "As"
@@ -131,6 +109,7 @@ TThen = "Then"
 TAnd = "And"
 TExamples = "Examples:"
 TTableSep = "|"
+TStar = "*"
 
 TTableCell
   = data:[^|\n]+
