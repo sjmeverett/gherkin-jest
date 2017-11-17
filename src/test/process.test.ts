@@ -16,14 +16,15 @@ describe('process', () => {
 
     expect(js).toBe(`
 const {cucumber} = require("gherkin-jest");
+const co = require("co");
 
 describe("Feature: " + "this is a test", () => {
-  it("supports the scenario: " + "a scenario", () => {
+  it("supports the scenario: " + "a scenario", co.wrap(function *() {
     const world = cucumber.createWorld();
-    cucumber.rule(world, "some givens");
-    cucumber.rule(world, "I do a thing");
-    cucumber.rule(world, "I will succeed");
-  });
+    yield cucumber.rule(world, "some givens");
+    yield cucumber.rule(world, "I do a thing");
+    yield cucumber.rule(world, "I will succeed");
+  }));
 });`)
   })
 })

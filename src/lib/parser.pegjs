@@ -1,6 +1,4 @@
 {
-  const _ = require('lodash');
-
   function expandTemplateString(template, example) {
     return template.replace(/<([^>]+)>/g, (_, key) => example[key]);
   }
@@ -13,6 +11,16 @@
     }
 
     return obj;
+  }
+
+  function flatten(arr) {
+    const result = [];
+
+    for (let element of arr) {
+      Array.prototype.push.apply(result, Array.isArray(element) ? element : [element]);
+    }
+
+    return result;
   }
 }
 
@@ -38,7 +46,7 @@ Reason
 
 Scenarios
   = scenarios:Scenario*
-  { return _.flatten(scenarios) }
+  { return flatten(scenarios) }
           
 Scenario = _ TScenario name:String NL rules:Rules _
   { return { name, rules } }

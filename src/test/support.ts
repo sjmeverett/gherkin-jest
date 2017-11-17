@@ -13,8 +13,14 @@ cucumber.defineCreateWorld(() => ({
 }));
 
 cucumber.defineRule(/^I have numbers (\d+) and (\d+)$/, (world: World, a: string, b: string) => {
-  world.a = parseInt(a);
-  world.b = parseInt(b);
+  // use a promise to test using promises
+  return new Promise((resolve) => {
+    process.nextTick(() => {
+      world.a = parseInt(a);
+      world.b = parseInt(b);
+      resolve();
+    });
+  });
 });
 
 cucumber.defineRule(/^I (add|subtract|multiply|divide) them$/, (world: World, op: string) => {
