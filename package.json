@@ -30,8 +30,7 @@
     "typescript": "^2.6.1"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
-    "source-map": "^0.6.1"
+    "co": "^4.6.0"
   },
   "repository": {
     "type": "git",

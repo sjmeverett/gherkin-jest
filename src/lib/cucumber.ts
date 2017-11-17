@@ -25,7 +25,7 @@ export default class Cucumber {
       const match = str.match(rule.regex);
 
       if (match) {
-        return rule.handler(world, ...match.slice(1));
+        return Promise.resolve(rule.handler(world, ...match.slice(1)));
       }
     }
 
