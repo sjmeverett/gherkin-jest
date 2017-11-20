@@ -37,9 +37,11 @@ describe("Parser", () => {
             "I want to test",
             "test",
             "test"
-          ]
+          ],
+          attributes: []
         }
-      ]
+      ],
+      attributes: []
     });
   });
 
@@ -63,9 +65,39 @@ describe("Parser", () => {
       scenarios: [
         {
           name: "this is a scenario outline",
-          rules: ["that I have abc", "I 123", "I -£*%"]
+          rules: ["that I have abc", "I 123", "I -£*%"],
+          attributes: []
         }
-      ]
+      ],
+      attributes: []
+    });
+  });
+
+
+  it("should parse a scenario with attributes", () => {
+    const result = parse(
+      `
+      @attribute1
+      Feature: foo
+        @attribute2
+        @attribute3
+        Scenario: this is a test
+          * a thing
+    `
+    );
+
+    expect(result).toEqual({
+      name: "foo",
+      scenarios: [
+        {
+          name: "this is a test",
+          rules: [
+            "a thing"
+          ],
+          attributes: ["attribute2", "attribute3"]
+        }
+      ],
+      attributes: ["attribute1"]
     });
   });
 });

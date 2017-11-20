@@ -19,7 +19,7 @@ const {cucumber} = require("gherkin-jest");
 const co = require("co");
 
 describe("Feature: " + "this is a test", () => {
-  it("supports the scenario: " + "a scenario", co.wrap(function *() {
+  it("a scenario", co.wrap(function *() {
     const world = cucumber.createWorld();
     yield cucumber.rule(world, "some givens");
     yield cucumber.rule(world, "I do a thing");
