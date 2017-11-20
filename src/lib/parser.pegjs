@@ -25,8 +25,15 @@
 }
 
 Feature
-  = _ TFeature name:String NL Preamble? _ scenarios:Scenarios
-	{ return { name, scenarios } }
+  = _ attributes:Attributes TFeature name:String NL Preamble? _ scenarios:Scenarios
+	{ return { name, scenarios, attributes } }
+
+Attribute 
+  = TAt attribute:Keyword _
+  { return attribute }
+
+Attributes
+  = Attribute*
 
 Preamble
   = As Want Reason
@@ -48,14 +55,15 @@ Scenarios
   = scenarios:Scenario*
   { return flatten(scenarios) }
           
-Scenario = _ TScenario name:String NL rules:Rules _
-  { return { name, rules } }
+Scenario = _ attributes:Attributes TScenario name:String NL rules:Rules _
+  { return { name, rules, attributes } }
 
-  / _ TScenarioOutline name:String NL rules:Rules examples:Examples _
+  / _ attributes:Attributes TScenarioOutline name:String NL rules:Rules examples:Examples _
   { 
     return examples.map((example) => ({
       name: expandTemplateString(name, example),
-      rules: rules.map((template) => expandTemplateString(template, example))
+      rules: rules.map((template) => expandTemplateString(template, example)),
+      attributes
     }));
   }
 
@@ -118,6 +126,7 @@ TAnd = "And"
 TExamples = "Examples:"
 TTableSep = "|"
 TStar = "*"
+TAt = "@"
 
 TTableCell
   = data:[^|\n]+
@@ -126,6 +135,10 @@ TTableCell
 String
   = str:[^\n]+
 	{ return str.join('').trim() }
+
+Keyword
+  = str:[a-zA-Z0-9_-]+
+  { return str.join('').trim() }
 
 NL = "\n"
 
