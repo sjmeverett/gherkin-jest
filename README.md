@@ -75,10 +75,10 @@ cucumber.defineRule('I have numbers {int} and {int}', (world, a, b) => {
 
 There are 4 types that can be used as placeholders:
 
- * `{int}` - matches an integer (`[-+]?\d+`) and runs `parseInt` on it before passing into your handler
- * `{float}` - matches a floating point number (`[-+]?\d*(\.\d+)?`) and runs `parseFloat` on it before passing on
- * `{word}` - matches a bunch of characters up to a whitespace character (`[^\s]+`)
- * `{string}` - matches a double-quoted string and returns only the contents of the string (`"([^"]+)"`)
+  * `{int}` - matches an integer (`[-+]?\d+`) and runs `parseInt` on it before passing into your handler
+  * `{float}` - matches a floating point number (`[-+]?\d*(\.\d+)?`) and runs `parseFloat` on it before passing on
+  * `{word}` - matches a bunch of characters up to a whitespace character (`[^\s]+`)
+  * `{string}` - matches a double-quoted string and returns only the contents of the string (`"([^"]+)"`)
 
 
 ###  Promises
@@ -100,7 +100,32 @@ Feature: I don't want this test to be run
 
 Currently there are two "special" annotations which have defined behaviour:
 
- * `@skip` - skips the test - outputs a `describe.skip` or `it.skip` for features and scenarios respectively
- * `@only` - only runs the annotated test - outputs a `describe.only` or `it.only` depending on the annotated item
+  * `@skip` - skips the test - outputs a `describe.skip` or `it.skip` for features and scenarios respectively
+  * `@only` - only runs the annotated test - outputs a `describe.only` or `it.only` depending on the annotated item
 
 Anything else is ignored, so could be useful for metadata, e.g. recording the associated issue number.
+
+### Hooks
+
+You can register functions to handle various hooks:
+
+  * `HookType.BeforeAll` - runs once at the beginning of each feature
+  * `HookType.BeforeEach` - runs at the beginning of each scenario, just after the call to `createWorld`
+  * `HookType.AfterAll` - runs once at the end of each feature
+  * `HookType.AfterEach` - runs at the end of each scenario
+
+To register a handler, call `cucumber.addHook`:
+
+```js
+cucumber.addHook(HookType.BeforeEach, (world, attributes) => {
+  // do some stuff
+})
+```
+
+The handler functions get two parameters:
+
+  * `world` - the world object returned from `createWorld` - for `BeforeAll` and `AfterAll` this is not relevant and is always `null`
+  * `attributes` - a string array of any attributes defined on the feature and/or scenario (if relevant)
+
+You can use the attributes parameter to do custom setup behaviour depending on attributes set on the test.  Note that a scenario
+gets the attributes from both the feature and that scenario.
