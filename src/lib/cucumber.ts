@@ -24,7 +24,7 @@ interface Rule {
 }
 
 const types = {
-  string: { regex: '"([^"]+)"' },
+  string: { regex: '"([^"]*)"' },
   int: { regex: "([-+]?\\d+)", converter: parseInt },
   float: { regex: "([-+]?\\d*(?:\\.\\d+)?)", converter: parseFloat },
   word: { regex: "([^\\s]+)" }
