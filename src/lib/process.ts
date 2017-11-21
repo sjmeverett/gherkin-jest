@@ -7,8 +7,8 @@ export default function process(src: string, filename: string) {
 const {cucumber} = require("gherkin-jest");
 const co = require("co");
 
-${jestFn('describe', feature.attributes)}("Feature: " + ${JSON.stringify(feature.name)}, () => {${feature.scenarios.map((scenario) => `
-  ${jestFn('it', scenario.attributes)}(${JSON.stringify(scenario.name)}, co.wrap(function *() {
+${jestFn('describe', feature.annotations)}("Feature: " + ${JSON.stringify(feature.name)}, () => {${feature.scenarios.map((scenario) => `
+  ${jestFn('it', scenario.annotations)}(${JSON.stringify(scenario.name)}, co.wrap(function *() {
     const world = cucumber.createWorld();
 ${scenario.rules.map((rule) => `    yield cucumber.rule(world, ${JSON.stringify(rule)});`).join('\n')}
   }));`).join('')}

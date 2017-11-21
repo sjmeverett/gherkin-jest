@@ -38,10 +38,10 @@ describe("Parser", () => {
             "test",
             "test"
           ],
-          attributes: []
+          annotations: []
         }
       ],
-      attributes: []
+      annotations: []
     });
   });
 
@@ -66,21 +66,21 @@ describe("Parser", () => {
         {
           name: "this is a scenario outline",
           rules: ["that I have abc", "I 123", "I -£*%"],
-          attributes: []
+          annotations: []
         }
       ],
-      attributes: []
+      annotations: []
     });
   });
 
 
-  it("should parse a scenario with attributes", () => {
+  it("should parse a scenario with annotations", () => {
     const result = parse(
       `
-      @attribute1
+      @annotation1
       Feature: foo
-        @attribute2
-        @attribute3
+        @annotation2
+        @annotation3
         Scenario: this is a test
           * a thing
     `
@@ -94,10 +94,10 @@ describe("Parser", () => {
           rules: [
             "a thing"
           ],
-          attributes: ["attribute2", "attribute3"]
+          annotations: ["annotation2", "annotation3"]
         }
       ],
-      attributes: ["attribute1"]
+      annotations: ["annotation1"]
     });
   });
 });
