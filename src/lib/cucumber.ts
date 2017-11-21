@@ -2,6 +2,22 @@ export interface RuleHandler {
   (world: any, ...args: string[]): any;
 }
 
+export interface HookHandler {
+  (world?: any, attributes?: string[]): any;
+}
+
+export enum HookType {
+  BeforeAll,
+  BeforeEach,
+  AfterAll,
+  AfterEach
+}
+
+interface Hook {
+  type: HookType;
+  handler: HookHandler;
+}
+
 interface Rule {
   regex: RegExp;
   handler: RuleHandler;
@@ -16,6 +32,7 @@ const types = {
 
 export default class Cucumber {
   private rules: Rule[] = [];
+  private hooks: Hook[] = [];
   private _createWorld: () => any;
 
   defineRule(match: string, handler: RuleHandler);
@@ -26,6 +43,34 @@ export default class Cucumber {
     } else {
       this.rules.push(this.compileTemplate(match, handler));
     }
+  }
+
+  addHook(type: HookType, handler: HookHandler) {
+    this.hooks.push({ type, handler });
+  }
+
+  private runHook(type: HookType, world?: any, attributes?: string[]) {
+    return Promise.all(
+      this.hooks
+        .filter(hook => hook.type === type)
+        .map(hook => hook.handler.call(this, world, attributes))
+    );
+  }
+
+  enterFeature(attributes: string[]) {
+    return this.runHook(HookType.BeforeAll, null, attributes);
+  }
+
+  enterScenario(world: any, attributes: string[]) {
+    return this.runHook(HookType.BeforeEach, world, attributes);
+  }
+
+  exitFeature(attributes: string[]) {
+    return this.runHook(HookType.AfterAll, null, attributes);
+  }
+
+  exitScenario(world: any, attributes: string[]) {
+    return this.runHook(HookType.AfterEach, world, attributes);
   }
 
   private compileTemplate(match: string, handler: RuleHandler) {
