@@ -3,16 +3,22 @@ import { parse } from './parser';
 export default function process(src: string, filename: string) {
   const feature = parse(src);
 
-  return `
+  const js = `
 const {cucumber} = require("gherkin-jest");
 const co = require("co");
 
 ${jestFn('describe', feature.annotations)}("Feature: " + ${JSON.stringify(feature.name)}, () => {${feature.scenarios.map((scenario) => `
+  beforeAll(() => cucumber.enterFeature(${JSON.stringify(feature.annotations)}));
+  afterAll(() => cucumber.exitFeature(${JSON.stringify(feature.annotations)}));
   ${jestFn('it', scenario.annotations)}(${JSON.stringify(scenario.name)}, co.wrap(function *() {
     const world = cucumber.createWorld();
+    yield cucumber.enterScenario(world, ${JSON.stringify(scenario.annotations)});
 ${scenario.rules.map((rule) => `    yield cucumber.rule(world, ${JSON.stringify(rule)});`).join('\n')}
+    yield cucumber.exitScenario(world, ${JSON.stringify(scenario.annotations)});
   }));`).join('')}
 });`;
+
+  return js;
 }
 
 function jestFn(name: string, attributes: string[]) {

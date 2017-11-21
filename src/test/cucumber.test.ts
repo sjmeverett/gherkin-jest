@@ -1,4 +1,4 @@
-import Cucumber from '../lib/cucumber';
+import Cucumber, { HookType } from '../lib/cucumber';
 
 describe('Cucumber', () => {
   it('should pick the right rule', () => {
@@ -31,5 +31,53 @@ describe('Cucumber', () => {
     cucumber.defineRule('string {string} int {int} float {float} word {word}', rule);
     cucumber.rule(null, 'string "some sort of string" int -4 float 3.14 word potatoes');
     expect(rule).toHaveBeenCalled();
-  })
+  });
+
+  it('should run beforeAll hooks on enterFeature', () => {
+    const cucumber = new Cucumber();
+    const hook = jest.fn();
+    const dummy = jest.fn();
+    cucumber.addHook(HookType.BeforeAll, hook);
+    cucumber.addHook(HookType.AfterAll, dummy);
+
+    cucumber.enterFeature(['foo']);
+    expect(hook).toHaveBeenCalledWith(null, ['foo']);
+    expect(dummy).not.toHaveBeenCalled();
+  });
+  
+  it('should run beforeEach hooks on enterScenario', () => {
+    const cucumber = new Cucumber();
+    const hook = jest.fn();
+    const dummy = jest.fn();
+    cucumber.addHook(HookType.BeforeEach, hook);
+    cucumber.addHook(HookType.AfterAll, dummy);
+
+    cucumber.enterScenario(1, ['foo']);
+    expect(hook).toHaveBeenCalledWith(1, ['foo']);
+    expect(dummy).not.toHaveBeenCalled();
+  });
+  
+  it('should run afterAll hooks on exitFeature', () => {
+    const cucumber = new Cucumber();
+    const hook = jest.fn();
+    const dummy = jest.fn();
+    cucumber.addHook(HookType.AfterAll, hook);
+    cucumber.addHook(HookType.BeforeAll, dummy);
+
+    cucumber.exitFeature(['foo']);
+    expect(hook).toHaveBeenCalledWith(null, ['foo']);
+    expect(dummy).not.toHaveBeenCalled();
+  });
+  
+  it('should run afterEach hooks on exitScenario', () => {
+    const cucumber = new Cucumber();
+    const hook = jest.fn();
+    const dummy = jest.fn();
+    cucumber.addHook(HookType.AfterEach, hook);
+    cucumber.addHook(HookType.BeforeAll, dummy);
+
+    cucumber.exitScenario(1, ['foo']);
+    expect(hook).toHaveBeenCalledWith(1, ['foo']);
+    expect(dummy).not.toHaveBeenCalled();
+  });
 });
