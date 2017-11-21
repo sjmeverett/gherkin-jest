@@ -2,13 +2,13 @@
 export interface Feature {
   name: Clause;
   scenarios: Scenario[];
-  attributes: string[];
+  annotations: string[];
 }
 
 export interface Scenario {
   name: Clause;
   rules: Clause[];
-  attributes: string[];
+  annotations: string[];
 }
 
 export type Clause = string;

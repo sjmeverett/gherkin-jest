@@ -25,15 +25,15 @@
 }
 
 Feature
-  = _ attributes:Attributes TFeature name:String NL Preamble? _ scenarios:Scenarios
-	{ return { name, scenarios, attributes } }
+  = _ annotations:Annotations TFeature name:String NL Preamble? _ scenarios:Scenarios
+	{ return { name, scenarios, annotations } }
 
-Attribute 
+Annotation 
   = TAt attribute:Keyword _
   { return attribute }
 
-Attributes
-  = Attribute*
+Annotations
+  = Annotation*
 
 Preamble
   = As Want Reason
@@ -55,15 +55,15 @@ Scenarios
   = scenarios:Scenario*
   { return flatten(scenarios) }
           
-Scenario = _ attributes:Attributes TScenario name:String NL rules:Rules _
-  { return { name, rules, attributes } }
+Scenario = _ annotations:Annotations TScenario name:String NL rules:Rules _
+  { return { name, rules, annotations } }
 
-  / _ attributes:Attributes TScenarioOutline name:String NL rules:Rules examples:Examples _
+  / _ annotations:Annotations TScenarioOutline name:String NL rules:Rules examples:Examples _
   { 
     return examples.map((example) => ({
       name: expandTemplateString(name, example),
       rules: rules.map((template) => expandTemplateString(template, example)),
-      attributes
+      annotations
     }));
   }
 
