@@ -12,9 +12,9 @@ ${jestFn('describe', feature.annotations)}("Feature: " + ${JSON.stringify(featur
   afterAll(() => cucumber.exitFeature(${JSON.stringify(feature.annotations)}));
   ${jestFn('it', scenario.annotations)}(${JSON.stringify(scenario.name)}, co.wrap(function *() {
     const world = cucumber.createWorld();
-    yield cucumber.enterScenario(world, ${JSON.stringify(scenario.annotations)});
+    yield cucumber.enterScenario(world, ${JSON.stringify([...feature.annotations, ...scenario.annotations])});
 ${scenario.rules.map((rule) => `    yield cucumber.rule(world, ${JSON.stringify(rule)});`).join('\n')}
-    yield cucumber.exitScenario(world, ${JSON.stringify(scenario.annotations)});
+    yield cucumber.exitScenario(world, ${JSON.stringify([...feature.annotations, ...scenario.annotations])});
   }));`).join('')}
 });`;
 

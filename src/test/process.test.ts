@@ -25,11 +25,11 @@ describe("Feature: " + "this is a test", () => {
   afterAll(() => cucumber.exitFeature(["someAttribute"]));
   it("a scenario", co.wrap(function *() {
     const world = cucumber.createWorld();
-    yield cucumber.enterScenario(world, ["some-other-attribute"]);
+    yield cucumber.enterScenario(world, ["someAttribute","some-other-attribute"]);
     yield cucumber.rule(world, "some givens");
     yield cucumber.rule(world, "I do a thing");
     yield cucumber.rule(world, "I will succeed");
-    yield cucumber.exitScenario(world, ["some-other-attribute"]);
+    yield cucumber.exitScenario(world, ["someAttribute","some-other-attribute"]);
   }));
 });`)
   })
