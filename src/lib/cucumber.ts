@@ -1,5 +1,5 @@
 export interface RuleHandler {
-  (world: any, ...args: string[]): any;
+  (world: any, ...args: any[]): any;
 }
 
 export interface HookHandler {
