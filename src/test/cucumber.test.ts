@@ -19,6 +19,15 @@ describe('Cucumber', () => {
     expect(rule3).not.toHaveBeenCalled();
   });
 
+  it('should properly handle tabular data', () => {
+    const cucumber = new Cucumber();
+    const rule1 = jest.fn();
+    cucumber.defineRule(/I have (\d+)/, rule1);
+    const tabularData = ['data']
+    cucumber.rule(null, 'I have 3', tabularData);
+    expect(rule1).toHaveBeenCalledWith(null, "3", tabularData);
+  })
+
   it('should support the string template style', () => {
     const cucumber = new Cucumber();
     const rule = jest.fn((world, str, int, float, word) => {

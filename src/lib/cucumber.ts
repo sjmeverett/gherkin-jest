@@ -106,12 +106,16 @@ export default class Cucumber {
     this._createWorld = _createWorld;
   }
 
-  rule(world: any, str: string): any {
+  rule(world: any, str: string, table?: any): any {
     for (const rule of this.rules) {
       const match = str.match(rule.regex);
 
       if (match) {
-        return Promise.resolve(rule.handler(world, ...match.slice(1)));
+        const params = match.slice(1)
+        if(table) {
+          params.push(table)
+        }
+        return Promise.resolve(rule.handler(world, ...params));
       }
     }
 

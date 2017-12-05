@@ -1,6 +1,9 @@
 {
   function expandTemplateString(template, example) {
-    return template.replace(/<([^>]+)>/g, (_, key) => example[key]);
+    const isScenario = typeof template !== 'object'
+    const templateString = isScenario ? template : template.rule
+    const expanded = templateString.replace(/<([^>]+)>/g, (_, key) => example[key])
+    return isScenario ? expanded : { rule: expanded };
   }
 
   function zip(keys, values) {
@@ -72,8 +75,8 @@ Rules
   { return rules }
 
 Rule
-  = _ Clause rule:String NL
-  { return rule }
+  = _ Clause rule:String NL table:Table
+  { return table.length ? { rule, table } : { rule } }
 
 Clause
   = TGiven
@@ -146,6 +149,7 @@ _ = WS Comment _
   / WS
 
 Comment = "//" String NL
+  / "#" String NL
 
 WS "whitespace"
   = [ \t\n\r]*

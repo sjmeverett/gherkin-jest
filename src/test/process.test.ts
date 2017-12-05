@@ -12,6 +12,9 @@ describe('process', () => {
       @some-other-attribute
       Scenario: a scenario
         Given some givens
+          And some data
+            | Table Head 1 | Table Head 2 |
+            | Cell 1 | Cell 2|
         When I do a thing
         Then I will succeed
     `, '');
@@ -27,6 +30,7 @@ describe("Feature: " + "this is a test", () => {
     const world = cucumber.createWorld();
     yield cucumber.enterScenario(world, ["someAttribute","some-other-attribute"]);
     yield cucumber.rule(world, "some givens");
+    yield cucumber.rule(world, "some data", [["Table Head 1","Table Head 2"],["Cell 1","Cell 2"]]);
     yield cucumber.rule(world, "I do a thing");
     yield cucumber.rule(world, "I will succeed");
     yield cucumber.exitScenario(world, ["someAttribute","some-other-attribute"]);

@@ -13,7 +13,7 @@ ${jestFn('describe', feature.annotations)}("Feature: " + ${JSON.stringify(featur
   ${jestFn('it', scenario.annotations)}(${JSON.stringify(scenario.name)}, co.wrap(function *() {
     const world = cucumber.createWorld();
     yield cucumber.enterScenario(world, ${JSON.stringify([...feature.annotations, ...scenario.annotations])});
-${scenario.rules.map((rule) => `    yield cucumber.rule(world, ${JSON.stringify(rule)});`).join('\n')}
+${scenario.rules.map(({ rule, table }) => `    yield cucumber.rule(world, ${JSON.stringify(rule)}${ table ? ', ' + JSON.stringify(table) : ''});`).join('\n')}
     yield cucumber.exitScenario(world, ${JSON.stringify([...feature.annotations, ...scenario.annotations])});
   }));`).join('')}
 });`;

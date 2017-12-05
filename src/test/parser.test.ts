@@ -28,15 +28,15 @@ describe("Parser", () => {
         {
           name: "this is a test",
           rules: [
-            "that I am testing",
-            "I am still testing",
-            "also that I test",
-            "I test",
-            "test",
-            "continue testing",
-            "I want to test",
-            "test",
-            "test"
+            { rule: "that I am testing" },
+            { rule: "I am still testing" },
+            { rule: "also that I test" },
+            { rule: "I test" },
+            { rule: "test" },
+            { rule: "continue testing" },
+            { rule: "I want to test" },
+            { rule: "test" },
+            { rule: "test" }
           ],
           annotations: []
         }
@@ -65,7 +65,11 @@ describe("Parser", () => {
       scenarios: [
         {
           name: "this is a scenario outline",
-          rules: ["that I have abc", "I 123", "I -£*%"],
+          rules: [ 
+            { rule: "that I have abc" },
+            { rule: "I 123" },
+            { rule: "I -£*%" }
+          ],
           annotations: []
         }
       ],
@@ -73,6 +77,68 @@ describe("Parser", () => {
     });
   });
 
+  it("should use hashtag for the comment character", () => {
+    const result = parse(
+      `
+      # foobar
+      Feature: foo
+        # comment
+        Scenario: this is a test
+          * a thing
+    `
+    );
+
+    expect(result).toEqual({
+      name: "foo",
+      scenarios: [
+        {
+          name: "this is a test",
+          rules: [
+            { rule: "a thing" }
+          ],
+          annotations: []
+        }
+      ],
+      annotations: []
+    });
+  });
+
+  it("should parse data tables", () => {
+    const result = parse(
+      `
+      Feature: foo
+        Scenario: test with data
+          Given some data
+            | Header1 | Header2 | Header3 |
+            | Cell1 | Cell2 | Cell3 |
+          Then something else
+    `
+    );
+
+    expect(result).toEqual({
+      name: "foo",
+      scenarios: [
+        {
+          name: "test with data",
+          rules: [
+            { 
+              rule: "some data",
+              table: [
+                [ 'Header1', 'Header2', 'Header3' ],
+                [ 'Cell1', 'Cell2', 'Cell3' ]
+              ]
+            },
+            {
+              rule: "something else"
+            }
+          ],
+          annotations: []
+        }
+      ],
+      annotations: []
+    });
+
+  })
 
   it("should parse a scenario with annotations", () => {
     const result = parse(
@@ -92,7 +158,7 @@ describe("Parser", () => {
         {
           name: "this is a test",
           rules: [
-            "a thing"
+            { rule: "a thing" }
           ],
           annotations: ["annotation2", "annotation3"]
         }
