@@ -1,3 +1,4 @@
+import FormattedTableData from './formatted-table-data'
 export interface RuleHandler {
   (world: any, ...args: any[]): any;
 }
@@ -111,9 +112,9 @@ export default class Cucumber {
       const match = str.match(rule.regex);
 
       if (match) {
-        const params = match.slice(1)
+        const params: Array<string | FormattedTableData>  = match.slice(1)
         if(table) {
-          params.push(table)
+          params.push(new FormattedTableData(table))
         }
         return Promise.resolve(rule.handler(world, ...params));
       }

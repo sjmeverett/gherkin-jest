@@ -129,3 +129,42 @@ The handler functions get two parameters:
 
 You can use the attributes parameter to do custom setup behaviour depending on attributes set on the test.  Note that a scenario
 gets the attributes from both the feature and that scenario.
+
+### Multiline tabular data
+
+You can define data tables in your specs with
+```gherkin
+Feature: Using tables
+  Scenario: lots of data
+    Given lots of data
+      | Header 1 | Header 2 | Header 3 |
+      | Value 1a | Value 1b | Value 1c |
+      | Value 2a | Value 2b | Value 2c |
+    When I use 3 key-value pairs
+      | Key 1 | Value 1 |
+      | Key 2 | Value 2 |
+      | Key 3 | Value 3 |
+    Then I can access all that data
+```
+
+And write rules for them like so
+```js
+cucumber.defineRule(/^lots of data$/, (world, table) => {
+  expect(table.hash['Header 2']).toEqual([ 'Value 1b', 'Value 2b' ])
+  expect(table.raw).toEqual([
+     [ 'Header 1', 'Header 2', 'Header 3' ],
+     [ 'Value 1a', 'Value 1b', 'Value 1c' ],
+     [ 'Value 2a', 'Value 2b', 'Value 2c' ],
+  ])
+});
+
+cucumber.defineRule(/^I use (\d+) key-value pairs$/, (world, number, table) => {
+  expect(number).toEqual(3)
+  expect(table.rowHash['Key 2']).toEqual('Value 2')
+  expect(table.raw).toEqual([
+    [ 'Key 1', 'Value 1' ],
+    [ 'Key 2', 'Value 2' ],
+    [ 'Key 3', 'Value 3' ],
+  ])
+});
+```
