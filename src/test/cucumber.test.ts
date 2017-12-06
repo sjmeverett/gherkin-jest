@@ -19,6 +19,33 @@ describe('Cucumber', () => {
     expect(rule3).not.toHaveBeenCalled();
   });
 
+  it('should properly parse tabular data', () => {
+    const cucumber = new Cucumber();
+    const rule1 = jest.fn();
+    cucumber.defineRule(/I have (\d+)/, rule1);
+    const tabularData = [
+      [ 'a1', 'b1', 'c1' ],
+      [ 'a2', 'b2', 'c2' ],
+      [ 'a3', 'b3', 'c3' ]
+    ]
+    cucumber.rule(null, 'I have 3', tabularData);
+    expect(rule1.mock.calls[0][0]).toEqual(null)
+    expect(rule1.mock.calls[0][1]).toEqual("3")
+    const parsedTabularData = rule1.mock.calls[0][2]
+    expect(parsedTabularData.raw).toEqual(tabularData)
+    expect(parsedTabularData.hash).toEqual({
+      a1: [ 'a2', 'a3' ],
+      b1: [ 'b2', 'b3' ],
+      c1: [ 'c2', 'c3' ]
+    })
+
+    expect(parsedTabularData.rowHash).toEqual({
+      a1: 'b1',
+      a2: 'b2',
+      a3: 'b3'
+    })
+  })
+
   it('should support the string template style', () => {
     const cucumber = new Cucumber();
     const rule = jest.fn((world, str, int, float, word) => {

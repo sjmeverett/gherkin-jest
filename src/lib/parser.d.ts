@@ -7,8 +7,13 @@ export interface Feature {
 
 export interface Scenario {
   name: Clause;
-  rules: Clause[];
+  rules: Rule[];
   annotations: string[];
+}
+
+export interface Rule {
+  rule: String;
+  table?: Clause[][];
 }
 
 export type Clause = string;
