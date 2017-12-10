@@ -1,4 +1,4 @@
-import { cucumber } from '../lib/cucumber';
+import { cucumber } from '../lib';
 
 interface World {
   a?: number;

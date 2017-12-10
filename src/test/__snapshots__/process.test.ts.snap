@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`process should return the correct JS 1`] = `
+"
+  const {cucumber} = require(\\"gherkin-jest\\");
+  const co = require(\\"co\\");
+
+  describe(\\"Feature: \\" + \\"using feature files in jest\\", () => {
+      beforeAll(() => cucumber.enterFeature([\\"someAttribute\\"]));
+      afterAll(() => cucumber.exitFeature([\\"someAttribute\\"]));
+      it(\\"a simple arithmetic test\\", co.wrap(function *() {
+      const world = cucumber.createWorld();
+      yield cucumber.enterScenario(world, [\\"someAttribute\\",\\"some-other-attribute\\"]);
+      yield cucumber.rule(world, \\"I have numbers 3 and 4\\");
+yield cucumber.rule(world, \\"I add them\\");
+yield cucumber.rule(world, \\"I get 7\\");
+      yield cucumber.exitScenario(world, [\\"someAttribute\\",\\"some-other-attribute\\"]);
+    }));
+it(\\"a more complex test\\", co.wrap(function *() {
+      const world = cucumber.createWorld();
+      yield cucumber.enterScenario(world, [\\"someAttribute\\"]);
+      yield cucumber.rule(world, \\"I have numbers 6 and 4\\");
+yield cucumber.rule(world, \\"I subtract them\\");
+yield cucumber.rule(world, \\"I get 2\\");
+      yield cucumber.exitScenario(world, [\\"someAttribute\\"]);
+    }));
+it(\\"a more complex test\\", co.wrap(function *() {
+      const world = cucumber.createWorld();
+      yield cucumber.enterScenario(world, [\\"someAttribute\\"]);
+      yield cucumber.rule(world, \\"I have numbers 8 and 2\\");
+yield cucumber.rule(world, \\"I divide them\\");
+yield cucumber.rule(world, \\"I get 4\\");
+      yield cucumber.exitScenario(world, [\\"someAttribute\\"]);
+    }));
+    });
+  "
+`;

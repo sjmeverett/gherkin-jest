@@ -1,24 +1,29 @@
-import { parse } from './parser';
+import { Transformer } from 'stucumber';
 
 export default function process(src: string, filename: string) {
-  const feature = parse(src);
+  const transformer = new Transformer<string>(
+    (feature, scenarios) => `${jestFn('describe', feature.annotations)}("Feature: " + ${JSON.stringify(feature.name.value)}, () => {
+      beforeAll(() => cucumber.enterFeature(${JSON.stringify(feature.annotations)}));
+      afterAll(() => cucumber.exitFeature(${JSON.stringify(feature.annotations)}));
+      ${scenarios.join('\n')}
+    });`,
+    (feature, scenario, rules) => `${jestFn('it', scenario.annotations)}(${JSON.stringify(scenario.name.value)}, co.wrap(function *() {
+      const world = cucumber.createWorld();
+      yield cucumber.enterScenario(world, ${JSON.stringify([...feature.annotations, ...scenario.annotations])});
+      ${rules.join('\n')}
+      yield cucumber.exitScenario(world, ${JSON.stringify([...feature.annotations, ...scenario.annotations])});
+    }));`,
+    (feature, scenario, rule) => `yield cucumber.rule(world, ${JSON.stringify(rule.value)});`
+  );
 
-  const js = `
-const {cucumber} = require("gherkin-jest");
-const co = require("co");
+  const js = transformer.transform(src);
+  
+  return `
+  const {cucumber} = require("gherkin-jest");
+  const co = require("co");
 
-${jestFn('describe', feature.annotations)}("Feature: " + ${JSON.stringify(feature.name)}, () => {${feature.scenarios.map((scenario) => `
-  beforeAll(() => cucumber.enterFeature(${JSON.stringify(feature.annotations)}));
-  afterAll(() => cucumber.exitFeature(${JSON.stringify(feature.annotations)}));
-  ${jestFn('it', scenario.annotations)}(${JSON.stringify(scenario.name)}, co.wrap(function *() {
-    const world = cucumber.createWorld();
-    yield cucumber.enterScenario(world, ${JSON.stringify([...feature.annotations, ...scenario.annotations])});
-${scenario.rules.map((rule) => `    yield cucumber.rule(world, ${JSON.stringify(rule)});`).join('\n')}
-    yield cucumber.exitScenario(world, ${JSON.stringify([...feature.annotations, ...scenario.annotations])});
-  }));`).join('')}
-});`;
-
-  return js;
+  ${js}
+  `;
 }
 
 function jestFn(name: string, attributes: string[]) {
