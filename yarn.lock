@@ -10,10 +10,6 @@
   version "8.0.50"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.50.tgz#dc545448e128c88c4eec7cd64025fcc3b7604541"
 
-"@types/source-map@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@types/source-map/-/source-map-0.5.2.tgz#973459e744cc7445c85b97f770275b479b138e08"
-
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -2669,9 +2665,11 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
-stucumber@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/stucumber/-/stucumber-0.1.0.tgz#c54e7d4374473b5c61bc114c06ad597548e82f07"
+stucumber@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/stucumber/-/stucumber-0.3.1.tgz#3c7a09afd6f7cc0d9b5dba950bf0c59c1f659567"
+  dependencies:
+    source-map "^0.6.1"
 
 supports-color@^2.0.0:
   version "2.0.0"

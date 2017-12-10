@@ -5,7 +5,7 @@
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
   "scripts": {
-    "test": "jest --no-cache --config=jest.config.json",
+    "test": "grunt && jest --no-cache --config=jest.config.json",
     "prepublish": "grunt"
   },
   "keywords": [
@@ -20,7 +20,6 @@
   "devDependencies": {
     "@types/jest": "^21.1.5",
     "@types/node": "^8.0.50",
-    "@types/source-map": "^0.5.2",
     "grunt": "^1.0.1",
     "grunt-ts": "^6.0.0-beta.17",
     "jest": "^21.2.1",
@@ -29,9 +28,8 @@
     "typescript": "^2.6.1"
   },
   "dependencies": {
-    "source-map": "^0.6.1",
     "source-map-support": "^0.5.0",
-    "stucumber": "^0.1.0"
+    "stucumber": "^0.3.1"
   },
   "repository": {
     "type": "git",
