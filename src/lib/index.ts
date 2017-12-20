@@ -1,4 +1,2 @@
-import {Cucumber} from 'stucumber';
-export const cucumber = new Cucumber();
-
+export {cucumber} from 'stucumber';
 export {default as process} from './process';
