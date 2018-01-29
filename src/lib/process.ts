@@ -23,5 +23,13 @@ export default function process(source: string, filename: string) {
     afterAllFn: 'afterAll'
   });
 
-  return transformer.transform(filename, source);
+  try {
+    return transformer.transform(filename, source);
+  } catch (e) {
+    if (e.name === 'SyntaxError' && e.location) {
+      fail(`${filename} (${e.location.start.line}, ${e.location.start.column}): ${e.message}`)
+    } else {
+      fail(`${e.name}: ${e.message}`)
+    }
+  }
 }
