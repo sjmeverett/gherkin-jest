@@ -7,6 +7,10 @@ require('source-map-support').install({
   retrieveFile: (path: string) => {
     path = path.trim();
 
+    if (!/\.feature$/.test(path)) {
+      return null;
+    }
+
     try {
       return process(readFileSync(path, 'utf8'), path);
     } catch (e) {
