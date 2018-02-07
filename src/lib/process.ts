@@ -31,9 +31,9 @@ export default function process(source: string, filename: string) {
     return transformer.transform(filename, source);
   } catch (e) {
     if (e.name === 'SyntaxError' && e.location) {
-      fail(`${filename} (${e.location.start.line}, ${e.location.start.column}): ${e.message}`)
+      throw new Error(`${filename} (${e.location.start.line}, ${e.location.start.column}): ${e.message}`)
     } else {
-      fail(`${e.name}: ${e.message}`)
+      throw new Error(`${e.name}: ${e.message}`)
     }
   }
 }
