@@ -1,5 +1,5 @@
-import {GenericTransformer} from 'stucumber';
-import {readFileSync} from 'fs';
+import { GenericTransformer } from 'stucumber';
+import { readFileSync } from 'fs';
 
 require('source-map-support').install({
   environment: 'node',
@@ -31,9 +31,17 @@ export default function process(source: string, filename: string) {
     return transformer.transform(filename, source);
   } catch (e) {
     if (e.name === 'SyntaxError' && e.location) {
-      fail(`${filename} (${e.location.start.line}, ${e.location.start.column}): ${e.message}`)
+      fail(
+        `${filename} (${e.location.start.line}, ${e.location.start.column}): ${
+          e.message
+        }`
+      );
     } else {
-      fail(`${e.name}: ${e.message}`)
+      fail(`${e.name}: ${e.message}`);
     }
   }
+}
+
+function fail(message: string) {
+  throw new Error(message);
 }
