@@ -3,7 +3,7 @@
     "^.+\\.(ts|tsx)$": "ts-jest/preprocessor",
     "^.+\\.feature$": "<rootDir>/../../dist/lib"
   },
-  "moduleNameMapper" :{
+  "moduleNameMapper": {
     "^gherkin-jest$": "<rootDir>/../../dist/lib"
   },
   "rootDir": "src/test",
