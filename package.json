@@ -8,13 +8,7 @@
     "test": "grunt && jest --no-cache --config=jest.config.json",
     "prepublish": "grunt"
   },
-  "keywords": [
-    "gherkin",
-    "cucumber",
-    "jest",
-    "test",
-    "bdd"
-  ],
+  "keywords": ["gherkin", "cucumber", "jest", "test", "bdd"],
   "author": "Stewart MacKenzie-Leigh",
   "license": "ISC",
   "devDependencies": {
@@ -29,7 +23,7 @@
   },
   "dependencies": {
     "source-map-support": "^0.5.0",
-    "stucumber": ">=0.12.0 <1.0.0"
+    "stucumber": "^0.15.0"
   },
   "repository": {
     "type": "git",
