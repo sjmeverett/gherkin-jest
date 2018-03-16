@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "source-map-support": "^0.5.0",
-    "stucumber": "^0.16.0"
+    "stucumber": "0.17.0"
   },
   "repository": {
     "type": "git",
