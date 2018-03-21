@@ -2665,9 +2665,9 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
-stucumber@0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/stucumber/-/stucumber-0.17.0.tgz#bf8c4a50a0b9f37838c0b2a3589d3736e552755f"
+stucumber@0.18.0:
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/stucumber/-/stucumber-0.18.0.tgz#c16c09b7bb2e3a74498c42607b74ac86ef38b5b2"
   dependencies:
     source-map "^0.6.1"
 
