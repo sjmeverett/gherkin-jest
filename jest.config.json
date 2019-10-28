@@ -1,6 +1,6 @@
 {
   "transform": {
-    "^.+\\.(ts|tsx)$": "ts-jest/preprocessor",
+    "^.+\\.(ts|tsx)$": "ts-jest",
     "^.+\\.feature$": "<rootDir>/../../dist/lib"
   },
   "moduleNameMapper": {
